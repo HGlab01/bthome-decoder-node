@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bthome-decoder', {
+        category: 'function', // Kategorie in der Node-Palette (z.B. common, function, storage, network)
+        color: '#a6bbcf',     // Hintergrundfarbe des Nodes
+        defaults: {           // Standardkonfiguration für den Node
+            name: { value: "" } // Ein Namensfeld für den Node (optional)
+        },
+        inputs: 1,            // Anzahl der Eingänge
+        outputs: 1,           // Anzahl der Ausgänge
+        icon: "parser-json.svg", // Symbol für den Node (z.B. ein SVG aus der Node-RED Bibliothek)
+        label: function () {   // Beschriftung des Nodes im Editor
+            return this.name || "BTHome Decoder";
+        },
+        labelStyle: function () { // Stil der Beschriftung
+            return this.name ? "node_label_italic" : "";
+        },
+        paletteLabel: "BTHome Decoder", // Beschriftung in der Node-Palette
+        oneditprepare: function () {
+            // Optional: JavaScript-Code, der ausgeführt wird, wenn der Node-Editor geöffnet wird
+        },
+        oneditsave: function () {
+            // Optional: JavaScript-Code, der ausgeführt wird, wenn der Node-Editor gespeichert wird
+        },
+        oneditcancel: function () {
+            // Optional: JavaScript-Code, der ausgeführt wird, wenn der Node-Editor abgebrochen wird
+        },
+        oneditdelete: function () {
+            // Optional: JavaScript-Code, der ausgeführt wird, wenn der Node gelöscht wird
+        },
+        oneditresize: function (size) {
+            // Optional: JavaScript-Code, der ausgeführt wird, wenn die Größe des Node-Editors geändert wird
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bthome-decoder">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-tips">
+        <b>Tipp:</b> Verbinden Sie diesen Node mit einem MQTT-Input-Node, der Shelly v1.0 BLE-Payloads empfängt, oder einem BLE-Input-Node, der Rohdaten liefert.
+        <br/>
+        Der Node erwartet <code>msg.payload</code> als Hex-String (z.B. "021c01...") oder als JSON-String im Shelly v1.0 Format (<code>{"payload": "021c01..."}</code>) oder als Node.js Buffer.
+    </div>
+</script>
+
+<script type="text/html" data-help-name="bthome-decoder">
+    <p>Dekodiert BTHome (Bluetooth LE Home Automation) Daten-Payloads.</p>
+    <h3>Eingaben</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">string | Buffer</span></dt>
+        <dd>
+            <ul>
+                <li>Ein <b>Hex-String</b>, der die BTHome Service Data repräsentiert (z.B. "<code>021c01...</code>").</li>
+                <li>Ein <b>JSON-String</b> im Shelly v1.0 BLE MQTT-Format (z.B. <code>{"payload": "021c01..."}</code>).</li>
+                <li>Ein <b>Node.js Buffer</b>, der die BTHome Service Data enthält.</li>
+            </ul>
+        </dd>
+    </dl>
+    <h3>Ausgaben</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>Ein JavaScript-Objekt mit den dekodierten BTHome-Sensorwerten (z.B. <code>{temperature: 22.5, humidity: 55, battery: 80}</code>).</dd>
+    </dl>
+    <h3>Details</h3>
+    <p>Dieser Node verwendet die <code>BleDecoder</code>-Klasse, um BTHome-Payloads gemäß dem BTHome v2 Protokoll zu parsen.</p>
+    <p>Er verarbeitet automatisch gängige Shelly v1.0 BLE Gateway MQTT-Nachrichten sowie reine Hex-Strings und Node.js Buffer.</p>
+    <p>Verschlüsselte Payloads können nicht dekodiert werden und führen zu einer Warnung, ohne Sensordaten auszugeben.</p>
+</script>
