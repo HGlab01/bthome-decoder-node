@@ -240,6 +240,9 @@ module.exports = function (RED) {
 
             let inputBuffer;
 
+            //wenn es ein Objekt ist, dann serialisieren
+            if (typeof msg.payload === 'object' && msg.payload !== null) msg.payload = JSON.stringify(msg.payload);
+
             // Eingabe kann ein Buffer sein (wenn von einem BLE-Scanner oder UDP-Node)
             // oder ein Hex-String (wenn von MQTT wie Shelly v1.0)
             if (Buffer.isBuffer(msg.payload)) {
